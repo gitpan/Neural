@@ -1,0 +1,34 @@
+		Neural package
+
+	Copyright (C) Tuomas J. Lukka 1996
+
+  This is an alpha version of the Neural::* package, currently
+containing only a small subset of the complete Neural suite that
+is partly implemented, partly planned.
+
+  This package contains enough code to do pretty fast back-propagation with
+arbitrarily large networks and define new group types.
+
+  The GUI is currently excluded because it is undergoing a change.
+
+  You need the blib package from Tk-b11.02 to use the tests.
+
+  The Math::DVector and Parametrized -packages are included for completeness.
+
+  I have not yet quite worked out how to use MakeMaker and XSUBs and C++:
+the problems are:
+ -Neural::Basic and Math::DVector: -L/usr/lib/gcc-lib... SUCKS.
+ -Neural::Basic: BasicGroups.c.PL generates many different files.
+      how to correctly do this?
+
+Often, this is fixed by doing perl Makefile.PL again in the root directory
+and then rerunning make. I really would like to see a solution for
+these problems.
+
+
+See also the README files in the subdirectories and the INSTALL -file.
+
+There are some examples in Neural-Basic/examples/
+
+	-Tuomas J. Lukka (Tuomas.Lukka@Helsinki.FI)
+

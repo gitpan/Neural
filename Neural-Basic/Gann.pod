@@ -1,0 +1,95 @@
+=head1 NAME
+
+Math::Gann - Gann design philosophy (package Neural(::.*)*)
+
+=head1 AUTHOR
+
+Tuomas J. Lukka (Tuomas.Lukka@Helsinki.FI)
+
+=head1 DESCRIPTION
+
+This manpage is an attempt to describe the philosophy behind Gann
+(Neural). While very much incomplete at the moment, I hope
+it gives some idea.
+
+For instructions on using Gann, see 
+L<Neural>,
+L<Neural::TD>,
+L<Neural::Gui>, and
+L<Neural::Gui::Examples>.
+
+=head2 Classes
+
+An attempt has been made to separate the network topology from the actual
+data. This way, the network behaves logically as a function of many
+variables (the weights and the inputs etc.) The primary advantage
+is that debugging is fairly easy and that the weights and
+the internal state of the network are easily accessible.
+
+The classes and their relationships are as follows:
+
+=over 4
+
+=item C<Neural::Vector>
+
+A small vector class, designed for speed and compactness.
+
+=item C<Neural::Net>
+
+The class that holds the network topology. Note that this class
+does not contain the weights, which are given to the methods of this
+class in an external vector.
+
+=item C<Neural::Pars>
+
+A convenient set of vectors made to a suitable size for a class.
+Contains all the other necessary vectors except Input, Output and Target.
+
+=item C<Neural::Examples>
+
+Stores a set of examples for teaching the network. Also does
+the evaluation of the error function for a set of weights given
+as a parameter.
+
+=item C<Neural::Minimizer>
+
+A minimizer. Calls a given function to evaluate a function and
+its derivative and tries to minimize the function.
+Contains some subobjects that define the actual minimization type;
+see L<Neural>
+
+=head2 GUI classes
+
+The graphical user interface of GANN is composed of several
+different types of objects that can be put together in a variety
+of interesting ways. In the division into objects an attempt has been 
+made to make everything that might have to be replaced replaceable.
+
+The classes are detailed in L<Neural::Gui> and L<Neural::Examples>.
+
+=head2 Network building
+
+The interface for building networks in the C code is
+as follows: first, an empty network with I<n> inputs is created.
+
+	$net = new Math:Neural::Net($n)
+
+
+
+=head2 The low-level network code
+
+The low-level network code is in C<gann_gen.c> and C<gann_gen.h>.
+It is possible to easily add new neuron types to design different
+kinds of networks. 
+
+For efficiency, the following design decisions have been made:
+In Gann, the abstraction level of the neurons are Groups.
+A group has a set of weights. Inside the group, any arrangement
+of weight sharing is possible.
+
+=head1 Defining new group types
+
+Group types are defined by writing a definition such as
+those in the file C<grouptypes> and compiling it.
+
+

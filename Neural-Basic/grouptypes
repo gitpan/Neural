@@ -1,0 +1,110 @@
+# This file is the group type definition file.
+# It is actually executable perl code,
+# to be run by gann_groups.xs.PL.
+# 
+# In this way, new group types can be relatively easily
+# defined with only a few lines of source code.
+# This also makes it easier to later alter the groups.
+#
+# Of this file, an xsub file is generated that contains both
+# the declarations and definitions of groups.
+
+GANN_DECLARE_GROUP(
+	"Bias", 
+{
+	n_neurons => 1,
+	activate => "UOUT(0) = 1;",
+	backactivate => "",
+	nweights => 0,
+}
+);
+
+GANN_DECLARE_GROUP(
+	"Basic", 
+{
+	activation => 1,
+	n_igroups => -1, # Unlimited, unset (at least 1)
+	n_neurons => -1, # Same
+	nweights => "
+		gann_nwts = 0;
+		for(i=0; i<NINGROUPS; i++) {
+			gann_nwts += NNINGROUP(i);
+		}
+		gann_nwts *= NNEURONS;",
+	gradient => "BACKPROP",
+	backprop_activation_loop => "
+		int wtind = 0;
+		FOR_MY_NEURONS {
+			INIT_BACKPROP;
+			FOR_ALL_INPUT_NEURONS {
+				STD_BACKPROP(THIS_INPUT_NEURON,wtind);
+				wtind ++;
+			}
+			FINISH_BACKPROP;
+		} ",
+}
+);
+
+# 
+# Weights for other input groups shared!
+#
+GANN_DECLARE_GROUP(
+	"XYConvolution1",
+{
+	activation => 1,
+	n_igroups => -1, # Extra input groups (including bias)
+	n_neurons => "LATTICE3D",
+	n_ilattices => 1,
+	datas => [
+		["xperc" , "int","xperc > 0","","Kernel_X"],
+		["yperc" , "int","yperc > 0","","Kernel_Y"],
+		["xoffs" , "int","1","","Offset_X"],
+		["yoffs" , "int","1","","Offset_Y"],
+		["outside" , "GANN_Vector *",
+			"outside->size() == ILATTICE_Z(0)","delete m_outside;",
+				"Conv_Extension"],
+	],
+	nweights => "
+		gann_nwts = 0;
+		FOR_ALL_INPUT_GROUPS {
+			gann_nwts += NNINGROUP(THIS_INPUT_GROUP);
+		}
+		gann_nwts += m_xperc * m_yperc * ILATTICE_Z(0);
+		gann_nwts *= MYLATTICE_ZSIZE;
+		",
+	gradient => "BACKPROP",
+	backprop_activation_loop => "
+		int wtind = 0; /* First do the ordinary groups */
+		FOR_MY_NEURONS {
+			INIT_BACKPROP;
+			FOR_ALL_INPUT_NEURONS {
+				STD_BACKPROP(THIS_INPUT_NEURON,wtind);
+			}
+			PAUSE_BACKPROP;
+		}
+		wtind ++;
+		int wtind0 = wtind;
+		int x,y;
+		FOR_MY_LATTICE { /* Same as for_my_neurons but xyz */
+			wtind = wtind0;
+			CONTINUE_BACKPROP;
+			x = m_xoffs + MYLATTICE_X; y = m_yoffs + MYLATTICE_Y;
+			for(int xi = 0; xi < m_xperc; xi ++) {
+			 for(int yi = 0; yi < m_yperc; yi ++) {
+			  for(int z = 0; z < ILATTICE_Z(0); z++) {
+			   if(ILATTICE_INSIDE(x+xi,y+yi,z)) {
+				   STD_BACKPROP(ILATTICE_NEURON(x+xi,y+yi,z),
+				   	wtind);
+		 	   } else {
+			   	STD_BACKPROP_CONST(
+					m_outside->elem(z),wtind);
+			   }
+			   wtind ++;
+			  }
+			 }
+			}
+			FINISH_BACKPROP;
+		}
+		",
+}
+);

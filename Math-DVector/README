@@ -1,0 +1,11 @@
+
+		Math-DVector package
+
+	Copyright (C) Tuomas J. Lukka 1996
+
+This package provides a simple vector of double implemented in C++
+for speed. It is usable both from perl and C++, making it possible
+to pass arguments to XS subroutines using these objects.
+
+The Neural::* modules use this class as their basis.
+

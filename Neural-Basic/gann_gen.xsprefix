@@ -1,0 +1,89 @@
+
+int *SVR2ints(SV *sv,int *n)
+{
+	AV *av;
+	if(!SvROK(sv)) {return 0;}
+	sv=(SV*)SvRV(sv);
+	fprintf(stderr,"REFTYPE:%s\n",sv_reftype(sv,1));
+	if(!strEQ(sv_reftype(sv,1),"ARRAY")) {
+		return 0;
+	}
+	av = (AV*)sv;
+	int i; int *p;
+	*n = av_len(av)+1;
+	p = new int[*n];
+	for(i=0; i<*n; i++) {
+		p[i] = SvIV(*av_fetch(av,i,0));
+	}
+	return p;
+}
+
+MODULE=Neural::Basic 	PACKAGE=Neural::Net
+
+double 
+set_target(foo,outstart,noutputs,DUnitOutputs,vOutputv,Target)
+	void *foo
+	int outstart
+	int noutputs
+	GANN_Vector *DUnitOutputs
+	GANN_Vector *vOutputv
+	GANN_Vector *Target
+	CODE:
+	{
+	RETVAL=0;
+	for(int i=0; i<noutputs; i++) {
+		DUnitOutputs->elem(outstart+i) =
+			vOutputv->elem(i) - Target->elem(i); 
+		RETVAL += 
+		   0.5*square(vOutputv->elem(i)-Target->elem(i));
+	}
+	}
+	OUTPUT:
+	RETVAL
+
+MODULE=Neural 	PACKAGE=Neural::Group
+
+int
+GANN_Group::activate(unitin,unitout,wei)
+	GANN_Vector *unitin
+	GANN_Vector *unitout
+	GANN_Vector *wei;
+
+double
+GANN_Group::backactivate(unitin,unitout,wei,dwei,dunitout)
+	GANN_Vector *unitin
+	GANN_Vector *unitout
+	GANN_Vector *wei
+	GANN_Vector *dwei
+	GANN_Vector *dunitout
+
+int
+GANN_Group::get_noutputs()
+
+int
+GANN_Group::get_ostart()
+
+void
+GANN_Group::DESTROY()
+
+MODULE=Neural::Basic	PACKAGE=Neural::Lattice
+
+GANN_Lattice *
+GANN_Lattice::new(x,y,z,ls,lx,ly)
+	int x
+	int y
+	int z
+	SV *ls
+	SV *lx
+	SV *ly
+	CODE:
+	{
+	int ns,nx,ny;
+	int *ils = SVR2ints(ls,&ns);
+	int *ilx = SVR2ints(lx,&nx);
+	int *ily = SVR2ints(ly,&ny);
+	assert(z == ns && z == nx && z == ny);
+	RETVAL = new GANN_Lattice(x,y,z,ils,ilx,ily);
+	}
+	OUTPUT:
+	RETVAL

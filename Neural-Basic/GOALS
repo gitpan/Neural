@@ -1,0 +1,35 @@
+Goals by version.
+
+If you want to help with something or need something sooner,
+contact me (Tuomas.Lukka@Helsinki.FI) and we'll work something
+out.
+
+In addition to the goals explicitly mentioned, a cleanup
+will accompany each release.
+
+0.00: (released)
+
+Simple minimizer, basic backpropagation network, knows XOR
+
+0.01: (released)
+
+Tk interface to minimizer parameters 
+Example display 
+User's guide
+Restructuring to packages under 
+Math::Neural::Tk::...
+Math::Neural::Net
+Math::Neural::Vector
+
+0.02:
+
+Temporal difference learning
+Quickprop?
+Examples
+
+0.03:
+
+Hinton diagrams? Network structure display
+Self-organizing network types.
+Some additional examples
+

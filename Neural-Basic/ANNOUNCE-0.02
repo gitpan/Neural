@@ -1,0 +1,83 @@
+(sent to gnu.announce, comp.ai.neural-nets, comp.lang.perl.announce)
+
+This purpose of this message is to announce the availability of
+Gann version 0.03, a copylefted artificial neural network simulator.
+
+This software is in the alpha stage of development so don't
+expect everything to be finished.
+
+The purpose of announcing Gann at this early stage is to solicit
+comments on the programming and user interfaces to the simulator.
+Currently, Gann only contains routines to do back-propagation with
+gradient descent or momentum descent. However, the interfaces are
+very generic and adding new algorithms is very easy.
+
+Gann is copylefted, see the file COPYING in the distribution for details.
+
+What's new?
+
+v0.03:
+  - Took out the most presentable parts of 0.02 and put them up for FTP
+v0.02: (never released)
+  - Cleaned up the network internals and interface to perl
+    so that adding new group types shouldn't require recompilation (!!!)
+  - Added a shorthand definition for group types so that
+    only short snippets of code and hints about the group
+    have to be provided.
+  - Added new, 'tiled' group type for doing convolutions
+  - Somewhat better documentation
+  -  with all this, introduced a slew of new bugs.
+  - Split the oiginal huge package to smaller subpackages
+     with clearly defined interfaces.
+  - Name is now Neural::
+v0.01:
+  - Graphical user interface, requires Tk-b10 (available from CPAN)
+    see http://www.helsinki.fi/~lukka/gann.html for screen shots.
+  - Nomenclature: Changed all package names to be under Math::Neural.
+  - Convergence detection in minimization.
+  - Temporal difference algorithm (TD(lambda))
+  - Bug fixes
+v0.00:
+  - Working backprop
+
+Gann is implemented as a Perl module using C++ for the speed-critical
+parts and Perl for everything else, for maximum flexibility.
+You need perl version 5.002 or higher (perl 5.001 is rumoured to work but..).
+
+The package contains an example program demonstrating the learning
+of the 'xor' function.
+
+If you are interested in seeing the package developed in a certain
+direction, please send me email. I'm especially interested in comments
+about the following issues
+ - What is good and what is bad about the current interfaces in Gann
+ - What other net types than backprop should I include? 
+   (for example, Kohonen etc. Which types of nets are currently
+   'hot' and which are not so interesting)
+ - What minimization algorithms should I include, what algorithms
+   do you have good and/or bad experiences with?
+
+If possible, please include references to publications, or code 
+on the net.
+
+I'd like to make Gann a general grab-bag of neural network algorithms
+containing well-documented code and examples for any algorithms
+one might want to use, implemented in an object-oriented fashion to encourage
+reuse and interesting multi-network experiments.
+
+The next revision will probably happen in a few weeks, after
+I've had time to consider the shape of the interface based on the
+comments obtained about this version.
+
+In the future, I intend to keep the release rate high in order to make
+new code and network types accessible as fast as possible.
+
+	Tuomas J. Lukka, Tuomas.Lukka@Helsinki.FI
+
+P.s.
+
+Gann is available from
+ftp://www.funet.fi/pub/languages/perl/CPAN/authors/id/LUKKA/Neural-0.03.tar.gz
+or any other CPAN site near you.  see
+ftp://www.funet.fi/pub/languages/perl/CPAN/CPAN.html
+for information about mirrors near you.

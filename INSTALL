@@ -1,0 +1,19 @@
+To install, 
+
+1) edit Makefile.PL so that the LIBS line is correct
+
+2) If your perl 5.002b2 resides in some place other than
+/usr/local/bin/perl, edit *.pl to contain the correct place
+
+3) type
+perl Makefile.PL
+(with perl being 5.002b2 or greater)
+
+4) type
+make
+
+If you want to install Gann, additionally do
+
+5) type
+make install
+

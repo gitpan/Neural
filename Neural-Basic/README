@@ -1,0 +1,96 @@
+		GANN - Copylefted Artificial Neural Networks
+
+	    Copyright (C) 1996 Tuomas J. Lukka. All Rights reserved.
+
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License as
+	published by the Free Software Foundation; either version 2 of
+	the License, or (at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+This is an alpha release of the GANN Neural Network C++ library /
+perl extension. 
+
+All the interfaces are currently in a state of flux so don't rely
+on being to upgrade painlessly.
+
+If there's something you'd like it to do that it doesn't do,
+please tell me and I will see about it. I'm very eager to add
+additional minimization algorithms, additional net types etc.
+
+Also, if you have suggestions on how to describe networks,
+I'd be glad to hear. There needs to be some Perl glue between
+the Neural::Net perl class and the user
+that would take a net in a human-readable sense and build it.
+Also, after that it should be possible to refer to units
+and weights through the network with the names in the human-readable
+description, using hash tables or some such method.
+The key is that none of this should cause any speed hit, if the
+net is used without them.
+
+PURPOSE
+
+The goals of GANN are 
+ a) Speed. 
+ 	The innermost loops in back- and forward propagation
+ 	must be tight and vectorizable
+ b) Interface to a high-level interpreted language. 
+ 	It should be possible to define networks online, to
+	access parts of them in interesting ways without
+	needing to compile loads of source code in between.
+ c) Flexibility.
+ 	It should be easy to add very different algorithms
+	to the general framework (SOM and backprop in the same 
+	network etc.)
+	It should be easy to access any part of the network
+	and see what is happening online.
+	
+These goals are partly achieved by storing the network
+topology and the numerical data separately, in vectors.
+The topology defines a function between the inputs and outputs
+and weights and derivatives of the weights. All these are given
+as parameters. Also, storing the data in vectors (and not, for example,
+in little malloced structs) makes cache hits more probable and
+enables vectorization.
+
+The files gann_gen.[ch] contain the actual simulator.
+The file gann_glue.xs is the interface to perl.
+Basic.pm is the perl module that performs minimization 
+
+examples/*.pl are some demonstrations of how to use GANN.
+
+REQUIREMENTS
+
+Gann requires Perl5.002 or later and g++. 
+
+A REQUEST
+
+This section is not formally part of the license, which is pure copyleft.
+However, I sincerily request that if you use this software or any
+derivative of it in scientific work, *PLEASE* give credit in the
+final publication *AND* send me a copy. My having the time to work
+on making this software useful for you depends heavily on this.
+
+Also, if you use it to develop new algorithms, *PLEASE* send
+me copies of the source to incorporate them into the main package.
+This way, your algorithms will get a wider audience and just think
+about the number of articles referring to your work if the algorithm
+works well for many people.
+
+TODO
+
+- Add algorithms and network types
+- Building networks.
+- Vectorize the tightest loops.
+
+AUTHOR
+
+ - Tuomas J. Lukka, Tuomas.Lukka@Helsinki.FI

@@ -1,0 +1,114 @@
+TYPEMAP
+GANN_Net *				O_GANN_NET
+GANN_Vector *				O_GANN_VECTOR
+GANN_GT_BiasGroup *			O_GANN_BIASGROUP
+GANN_GT_BasicGroup *			O_GANN_BASICGROUP
+GANN_GT_XYConvolutionGroup *		O_GANN_XYCONVOLUTIONGROUP
+GANN_Group *				O_GANN_GROUP
+GANN_Lattice *				O_GANN_LATTICE
+GANN_iarr				O_GANN_IARR
+
+OUTPUT
+# The Perl object is blessed into 'CLASS', which should be a
+# char* having the name of the package for the blessing.
+O_OBJECT
+	sv_setref_pv( $arg, CLASS, (void*)$var );
+O_GANN_NET
+	sv_setref_pv( $arg, "Neural::Net", (void*)$var );
+O_GANN_VECTOR
+	sv_setref_pv( $arg, "Neural::Vector", (void*)$var );
+O_GANN_BIASGROUP
+	sv_setref_pv( $arg, "Neural::BiasGroup", (void*)$var );
+O_GANN_BASICGROUP
+	sv_setref_pv( $arg, "Neural::BasicGroup", (void*)$var );
+O_GANN_XYCONVOLUTIONGROUP
+	sv_setref_pv( $arg, "Neural::XYConvolutionGroup", (void*)$var );
+O_GANN_GROUP
+	croak("Gann_Group should not be output by ANY routine\n");
+O_GANN_LATTICE
+	sv_setref_pv( $arg, "Neural::Lattice", (void*)$var );
+O_GANN_IARR
+	croak("Gann_Iarr should not be output by ANY routine\n");
+	
+	
+
+INPUT
+O_OBJECT
+	if( sv_isobject($arg) && (SvTYPE(SvRV($arg)) == SVt_PVMG) )
+	$var = ($type)SvIV((SV*)SvRV( $arg ));
+	else{
+	warn( \"${Package}::$func_name() -- $var is not a blessed SV reference\" );
+	XSRETURN_UNDEF;
+	}
+O_GANN_NET
+	if( sv_isobject($arg) && (SvTYPE(SvRV($arg)) == SVt_PVMG) )
+	$var = ($type)SvIV((SV*)SvRV( $arg ));
+	else{
+	warn( \"${Package}::$func_name() -- $var is not a blessed SV reference\" );
+	XSRETURN_UNDEF;
+	}
+O_GANN_VECTOR
+	if( sv_isobject($arg) && (SvTYPE(SvRV($arg)) == SVt_PVMG) )
+	$var = ($type)SvIV((SV*)SvRV( $arg ));
+	else{
+	warn( \"${Package}::$func_name() -- $var is not a blessed SV reference\" );
+	XSRETURN_UNDEF;
+	}
+O_GANN_BIASGROUP
+	if( sv_isobject($arg) && (SvTYPE(SvRV($arg)) == SVt_PVMG) )
+	$var = ($type)SvIV((SV*)SvRV( $arg ));
+	else{
+	warn( \"${Package}::$func_name() -- $var is not a blessed SV reference\" );
+	XSRETURN_UNDEF;
+	}
+O_GANN_BASICGROUP
+	if( sv_isobject($arg) && (SvTYPE(SvRV($arg)) == SVt_PVMG) )
+	$var = ($type)SvIV((SV*)SvRV( $arg ));
+	else{
+	warn( \"${Package}::$func_name() -- $var is not a blessed SV reference\" );
+	XSRETURN_UNDEF;
+	}
+O_GANN_XYCONVOLUTIONGROUP
+	if( sv_isobject($arg) && (SvTYPE(SvRV($arg)) == SVt_PVMG) )
+	$var = ($type)SvIV((SV*)SvRV( $arg ));
+	else{
+	warn( \"${Package}::$func_name() -- $var is not a blessed SV reference\" );
+	XSRETURN_UNDEF;
+	}
+O_GANN_GROUP
+	if( sv_isobject($arg) && (SvTYPE(SvRV($arg)) == SVt_PVMG) )
+	$var = ($type)SvIV((SV*)SvRV( $arg ));
+	else{
+	warn( \"${Package}::$func_name() -- $var is not a blessed SV reference\" );
+	XSRETURN_UNDEF;
+	}
+O_GANN_LATTICE
+	if( sv_isobject($arg) && (SvTYPE(SvRV($arg)) == SVt_PVMG) )
+	$var = ($type)SvIV((SV*)SvRV( $arg ));
+	else{
+	warn( \"${Package}::$func_name() -- $var is not a blessed SV reference\" );
+	XSRETURN_UNDEF;
+	}
+O_GANN_IARR
+	{
+	AV *av;
+	if(!SvROK($arg)) {
+	  warn(\"${Packge}::$func_name() -- $var is not a reference\");
+	  XSRETURN_UNDEF;
+	}
+	SV *sv = (SV*)SvRV($arg);
+	if(!strEQ(sv_reftype(sv,1),\"ARRAY\")) {
+	  warn(\"${Packge}::$func_name() -- $var is not a reference to array\");
+	  XSRETURN_UNDEF;
+	}
+	av = (AV*)sv;
+	int i; int *p;
+	$var.n = av_len(av)+1;
+	$var.i = new int[$var.n];
+	for(i=0; i<$var.n; i++) {
+		$var.i[i] = SvIV(*av_fetch(av,i,0));
+	}
+	}
+
+
+	 
